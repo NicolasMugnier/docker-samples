@@ -113,7 +113,7 @@ docker network create app-network
 
 Start php-fpm
 ```sh
-docker run --rm --network app-network --name php -p 9000:9000 -v $PWD/src:/usr/share/nginx/html php:8.4.3-fpm-alpine3.20
+docker run --rm --network app-network --name php -v $PWD/src:/usr/share/nginx/html php:8.4.3-fpm-alpine3.20
 ```
 
 Start nginx
@@ -346,7 +346,7 @@ This error is about unkown host **postgres**, we have now to start the postgres 
 Open a new terminal and run the following command
 
 ```sh
-docker run --rm --name postgres --network app-network -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+docker run --rm --name postgres --network app-network -e POSTGRES_PASSWORD=secret postgres
 ```
 
 Next in another terminal 
@@ -471,12 +471,12 @@ Start containers (in separate terminals)
 
 Start postgres
 ```sh
-docker run --rm --name postgres --network app-network -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+docker run --rm --name postgres --network app-network -e POSTGRES_PASSWORD=secret postgres
 ```
 
 Start php-fpm
 ```sh
-docker run --rm --network app-network --name php -p 9000:9000 -v $PWD:/usr/share/nginx/html my-php:8.4.3-fpm-alpine3.20
+docker run --rm --network app-network --name php -v $PWD:/usr/share/nginx/html my-php:8.4.3-fpm-alpine3.20
 ```
 
 Start nginx
@@ -518,8 +518,6 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_PASSWORD: secret
     networks:
@@ -531,8 +529,6 @@ services:
     working_dir: /usr/share/nginx/html
     volumes:
       - .:/usr/share/nginx/html
-    ports:
-      - 9000:9000
     networks:
       - app-network
 
