@@ -1,0 +1,49 @@
+networks:
+  app-network:
+
+services:
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: secret
+    networks:
+      - app-network
+
+  php-fpm:
+    build: ./docker/php-fpm
+    container_name: php
+    working_dir: /usr/share/nginx/html
+    volumes:
+      - .:/usr/share/nginx/html
+    ports:
+      - 9000:9000
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    working_dir: /usr/share/nginx/html
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - .:/usr/share/nginx/html
+    ports:
+      - 80:80
+    networks:
+      - app-network
+
+  php-cli:
+    build: ./docker/php-cli
+    volumes:
+      - .:/user/src/app
+    networks:
+      - app-network
+    working_dir: /user/src/app
+
+  composer:
+    image: composer:latest
+    volumes:
+      - .:/app
