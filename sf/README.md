@@ -187,5 +187,7 @@ spx.http_key="dev" \n' >> /usr/local/etc/php/conf.d/docker-cli.ini
 Clear cache
 
 ```sh
-docker-compose run --rm php-cli php -d SPX_ENABLED=1 -d SPX_REPORT=ful bin/console cache:warmup
+docker-compose run --rm -e SPX_ENABLED=1 php-cli bin/console cache:warmup
 ```
+
+![cli profiling](./img/step4/cli-profiling.png)
